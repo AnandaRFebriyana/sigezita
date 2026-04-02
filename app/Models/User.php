@@ -22,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'phone', 
+        'is_active', 
     ];
 
     /**
@@ -44,6 +47,32 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active'         => 'boolean',
         ];
+    }
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isPetugas(): bool
+    {
+        return $this->role === 'petugas';
+    }
+
+    // ── Relations ─────────────────────────────────────────────
+    public function posyandu()
+    {
+        return $this->belongsTo(Posyandu::class);
+    }
+ 
+    public function balita()
+    {
+        return $this->hasMany(Balita::class);
+    }
+ 
+    public function pengukuran()
+    {
+        return $this->hasMany(Pengukuran::class);
     }
 }
