@@ -66,6 +66,16 @@ class Balita extends Model
 
         return "$months bln";
     }
+    public function getUmurFormattedAttribute(): string
+    {
+        $bulan = Carbon::parse($this->tanggal_lahir)->diffInMonths(now());
+        $tahun = intdiv($bulan, 12);
+        $sisa  = $bulan % 12;
+        if ($tahun > 0) {
+            return $sisa > 0 ? "{$tahun} thn {$sisa} bln" : "{$tahun} tahun";
+        }
+        return "{$bulan} bulan";
+    }
  
     public function getJenisKelaminLabelAttribute(): string
     {
@@ -81,5 +91,8 @@ class Balita extends Model
     {
         return $query->where('posyandu_id', $posyandu_id);
     }
-
+    public function pengukuranTerakhir()
+    {
+        return $this->hasOne(Pengukuran::class)->latestOfMany('tanggal_ukur');
+    }
 }

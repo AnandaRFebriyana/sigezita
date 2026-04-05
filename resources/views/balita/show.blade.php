@@ -2,13 +2,13 @@
 @section('title', 'Detail Balita')
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('balita.index') }}">Data Balita</a></li>
-<li class="breadcrumb-item active">{{ $balita->nama_balita }}</li>
+<li class="breadcrumb-item active">{{ $balita->nama }}</li>
 @endsection
 
 @section('content')
 <div class="page-header">
     <div>
-        <h1><i class="fas fa-child mr-2 text-primary"></i> {{ $balita->nama_balita }}</h1>
+        <h1><i class="fas fa-child mr-2 text-primary"></i> {{ $balita->nama }}</h1>
         <small class="text-muted">{{ $balita->kode_balita }}</small>
     </div>
     <div class="d-flex" style="gap:0.5rem">
@@ -31,7 +31,7 @@
                     <div class="avatar mx-auto mb-2" style="width:5rem;height:5rem;font-size:2rem;background:{{ $balita->jenis_kelamin === 'L' ? '#36b9cc' : '#e83e8c' }}">
                         <i class="fas fa-{{ $balita->jenis_kelamin === 'L' ? 'mars' : 'venus' }}"></i>
                     </div>
-                    <h5 class="font-weight-bold mb-0">{{ $balita->nama_balita }}</h5>
+                    <h5 class="font-weight-bold mb-0">{{ $balita->nama }}</h5>
                     <small class="text-muted">{{ $balita->jenis_kelamin_label }}</small>
                 </div>
 
@@ -39,11 +39,11 @@
                     <tr><td class="text-muted" style="width:40%">Kode</td><td><code>{{ $balita->kode_balita }}</code></td></tr>
                     <tr><td class="text-muted">Tgl Lahir</td><td>{{ $balita->tanggal_lahir->format('d F Y') }}</td></tr>
                     <tr><td class="text-muted">Umur</td><td><strong>{{ $balita->umur_formatted }}</strong></td></tr>
-                    <tr><td class="text-muted">Posyandu</td><td>{{ $balita->posyandu->nama_posyandu ?? '-' }}</td></tr>
+                    <tr><td class="text-muted">Posyandu</td><td>{{ $balita->posyandu->nama ?? '-' }}</td></tr>
                     <tr><td class="text-muted">Orang Tua</td><td>{{ $balita->nama_orang_tua }}</td></tr>
                     <tr><td class="text-muted">No. HP</td><td>{{ $balita->no_hp ?? '-' }}</td></tr>
                     <tr><td class="text-muted">Alamat</td><td>{{ $balita->alamat ?? '-' }}</td></tr>
-                    <tr><td class="text-muted">Petugas</td><td>{{ $balita->petugas->name ?? '-' }}</td></tr>
+                    <tr><td class="text-muted">Petugas</td><td>{{ $balita->creator->nama ?? '-' }}</td></tr>
                 </table>
             </div>
         </div>

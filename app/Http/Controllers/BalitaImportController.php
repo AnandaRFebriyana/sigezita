@@ -7,6 +7,7 @@ use App\Models\Posyandu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -210,9 +211,10 @@ class BalitaImportController extends Controller
                     'tanggal_lahir'  => $data['tanggal_lahir'],
                     'jenis_kelamin'  => $data['jenis_kelamin'],
                     'nama_orang_tua' => $data['nama_orang_tua'],
-                    'no_telepon'     => $data['no_telepon'] ?: null,
+                    'no_telepon'     => $data['no_hp'] ?: null,
                     'alamat'         => $data['alamat'] ?: null,
                     'posyandu_id'    => $posyanduMap[$data['kode']],
+                    'created_by'     => Auth::id(),
                 ]);
                 $imported++;
             }

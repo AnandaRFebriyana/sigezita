@@ -26,9 +26,9 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">Nama Balita <span class="text-danger">*</span></label>
-                                <input type="text" name="nama_balita" class="form-control @error('nama_balita') is-invalid @enderror"
-                                    value="{{ old('nama_balita', $balita->nama_balita) }}" required>
-                                @error('nama_balita')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
+                                    value="{{ old('nama', $balita->nama) }}" required>
+                                @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -58,7 +58,7 @@
                                 <select name="posyandu_id" class="form-control" required>
                                     @foreach($posyandu as $p)
                                     <option value="{{ $p->id }}" {{ old('posyandu_id', $balita->posyandu_id) == $p->id ? 'selected' : '' }}>
-                                        {{ $p->nama_posyandu }}
+                                        {{ $p->nama }}
                                     </option>
                                     @endforeach
                                 </select>

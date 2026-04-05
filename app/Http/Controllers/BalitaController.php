@@ -100,8 +100,8 @@ class BalitaController extends Controller
      */
     public function show(Balita $balita)
     {
-        $this->authorize_access($balita);
-        $balita->load(['posyandu', 'petugas', 'pengukuran.petugas']);
+        $this->authorizeBalita($balita);
+        $balita->load(['posyandu', 'creator', 'pengukuran']);
  
         $pengukuranData = $balita->pengukuran->map(fn($p) => [
             'tanggal' => $p->tanggal_ukur->format('d/m/Y'),
@@ -120,9 +120,9 @@ class BalitaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $balita)
+    public function edit(Balita $balita)
     {
-        $this->authorize_access($balita);
+        $this->authorizeBalita($balita);
         $user = Auth::user();
         $posyandu = $user->isAdmin()
             ? Posyandu::where('is_active', true)->get()
@@ -159,7 +159,7 @@ class BalitaController extends Controller
      */
     public function destroy(Balita $balita)
     {
-        $this->authorize_access($balita);
+        $this->authorizeBalita($balita);
         $balita->update(['is_active' => false]);
  
         return redirect()->route('balita.index')

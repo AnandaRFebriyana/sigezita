@@ -36,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/balita/import/template', [BalitaImportController::class, 'template'])->name('balita.import.template');
     Route::post('/balita/import/preview',  [BalitaImportController::class, 'preview'])->name('balita.import.preview');
     Route::post('/balita/import/store',    [BalitaImportController::class, 'store'])->name('balita.import.store');
-    Route::resource('balita', BalitaController::class);
+    Route::resource('balita', BalitaController::class)->parameters(['balita' => 'balita']);
 
     // Data Pengukuran
     Route::resource('pengukuran', PengukuranController::class);
