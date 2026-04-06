@@ -59,7 +59,7 @@ class DashboardController extends Controller
     private function petugasDashboard()
     {
         $user = Auth::user();
-        $posyanduIds = $user->posyandu->pluck('id');
+        $posyanduIds = $user->posyandu_id ? [$user->posyandu_id] : [];
 
         $totalBalita = Balita::whereIn('posyandu_id', $posyanduIds)->where('is_active', true)->count();
         $totalPengukuran = Pengukuran::whereHas('balita', function ($q) use ($posyanduIds) {
@@ -72,9 +72,9 @@ class DashboardController extends Controller
             ->count();
 
         // Status distribusi untuk posyandu ini
-        $distribusiStatus = $this->getDistribusiStatus($posyanduIds->toArray());
-        $trenBulanan = $this->getTrenBulanan($posyanduIds->toArray());
-        $distribusiIndikator = $this->getDistribusiIndikator($posyanduIds->toArray());
+        $distribusiStatus = $this->getDistribusiStatus($posyanduIds);
+        $trenBulanan = $this->getTrenBulanan($posyanduIds);
+        $distribusiIndikator = $this->getDistribusiIndikator($posyanduIds);
 
         $totalBerisiko = Pengukuran::whereHas('balita', function ($q) use ($posyanduIds) {
             $q->whereIn('posyandu_id', $posyanduIds);
