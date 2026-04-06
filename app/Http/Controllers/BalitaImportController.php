@@ -211,7 +211,7 @@ class BalitaImportController extends Controller
                     'tanggal_lahir'  => $data['tanggal_lahir'],
                     'jenis_kelamin'  => $data['jenis_kelamin'],
                     'nama_orang_tua' => $data['nama_orang_tua'],
-                    'no_telepon'     => $data['no_hp'] ?: null,
+                    'no_hp'          => $data['no_telepon'] ?: null,
                     'alamat'         => $data['alamat'] ?: null,
                     'posyandu_id'    => $posyanduMap[$data['kode']],
                     'created_by'     => Auth::id(),
