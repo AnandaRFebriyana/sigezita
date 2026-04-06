@@ -31,62 +31,56 @@
         <div class="table-responsive">
             <table class="table table-hover mb-0">
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nama Posyandu</th>
-                        <th>Wilayah</th>
-                        <th>Total Balita</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($posyandu as $i => $p)
-                    <tr>
-                        <td>{{ $posyandu->firstItem() + $i }}</td>
-
-                        <td><strong>{{ $p->nama }}</strong></td>
-
-                        <td>
-                            <small>
-                                {{ implode(', ', array_filter([$p->kelurahan, $p->kecamatan, $p->kabupaten])) ?: '-' }}
-                            </small>
-                        </td>
-
-                        <td>-</td> {{-- karena tidak ada field penanggung_jawab --}}
-
-                        <td>
-                            <span class="badge badge-info">
-                                {{ $p->balita_count ?? 0 }} balita
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge {{ $p->is_active ? 'badge-success' : 'badge-secondary' }}">
-                                {{ $p->is_active ? 'Aktif' : 'Nonaktif' }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <div class="btn-group btn-group-sm">
-                                <a href="{{ route('admin.posyandu.edit', $p->id) }}" class="btn btn-warning">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-
-                                <button onclick="confirmDelete('{{ route('admin.posyandu.destroy', $p->id) }}')" class="btn btn-danger">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
-                            Tidak ada data posyandu
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
+    <tr>
+        <th>#</th>
+        <th>Nama Posyandu</th>
+        <th>Kode</th>
+        <th>Wilayah</th>
+        <th>Total Balita</th>
+        <th>Status</th>
+        <th>Aksi</th>
+    </tr>
+</thead>
+<tbody>
+    @forelse($posyandu as $i => $p)
+    <tr>
+        <td>{{ $posyandu->firstItem() + $i }}</td>
+        <td><strong>{{ $p->nama }}</strong></td>
+        <td><code>{{ $p->kode }}</code></td>
+        <td>
+            <small>
+                {{ implode(', ', array_filter([$p->kelurahan, $p->kecamatan, $p->kota])) ?: '-' }}
+            </small>
+        </td>
+        <td>
+            <span class="badge badge-info">
+                {{ $p->balita_count ?? 0 }} balita
+            </span>
+        </td>
+        <td>
+            <span class="badge {{ $p->is_active ? 'badge-success' : 'badge-secondary' }}">
+                {{ $p->is_active ? 'Aktif' : 'Nonaktif' }}
+            </span>
+        </td>
+        <td>
+            <div class="btn-group btn-group-sm">
+                <a href="{{ route('admin.posyandu.edit', $p->id) }}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <button onclick="confirmDelete('{{ route('admin.posyandu.destroy', $p->id) }}')" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </td>
+    </tr>
+    @empty
+    <tr>
+        <td colspan="7" class="text-center text-muted py-4">
+            Tidak ada data posyandu
+        </td>
+    </tr>
+    @endforelse
+</tbody>
             </table>
         </div>
     </div>

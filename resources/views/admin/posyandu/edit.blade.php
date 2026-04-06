@@ -25,6 +25,11 @@
                                 value="{{ old('nama', $posyandu->nama) }}" required>
                             @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
+                        <div class="form-group">
+                            <label class="form-label">Kode Posyandu</label>
+                            <input type="text" class="form-control bg-light" value="{{ $posyandu->kode }}" readonly>
+                            <small class="text-muted">Kode tidak dapat diubah</small>
+                        </div>
                     </div>
                 </div>
 

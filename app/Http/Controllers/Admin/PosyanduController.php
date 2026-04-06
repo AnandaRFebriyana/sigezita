@@ -36,7 +36,8 @@ class PosyanduController extends Controller
             'kota'             => 'nullable|string|max:100',
             'alamat'           => 'nullable|string',
         ]);
-        $validated['kode'] = 'PSY-' . strtoupper(uniqid());
+        $last = Posyandu::max('id') ?? 0;
+        $validated['kode'] = 'PSY-' . str_pad($last + 1, 3, '0', STR_PAD_LEFT);
         Posyandu::create($validated);
 
         return redirect()->route('admin.posyandu.index')
@@ -52,7 +53,6 @@ class PosyanduController extends Controller
     {
         $validated = $request->validate([
             'nama'    => 'required|string|max:100',
-            'kode'    => 'required|string|max:20|unique:posyandu,kode,' . $posyandu->id,
             'kelurahan'        => 'nullable|string|max:100',
             'kecamatan'        => 'nullable|string|max:100',
             'kota'             => 'nullable|string|max:100',
