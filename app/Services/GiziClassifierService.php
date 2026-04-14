@@ -68,25 +68,40 @@ class GiziClassifierService
     }
 
     public function predict($data)
-    {
-        try {
-            $response = Http::timeout(30)->post($this->baseUrl . '/predict-all', [
-                'jenis_kelamin' => $data['jenis_kelamin'],
+{
+    try {
+        // Konversi L/P → 1/0
+        $jenisKelamin = $data['jenis_kelamin'] === 'L' ? 1 : 0;
+
+        $response = Http::timeout(30)
+            ->post($this->baseUrl . '/predict-all', [
+                'jenis_kelamin' => $jenisKelamin,
                 'umur'          => $data['umur'],
                 'berat_badan'   => $data['berat_badan'],
                 'tinggi_badan'  => $data['tinggi_badan'],
             ]);
 
-            if ($response->successful()) {
-                return $response->json();
-            }
+        if ($response->successful()) {
+            $json = $response->json();
 
-            return $this->fallback();
-
-        } catch (\Exception $e) {
-            return $this->fallback();
+            // Mapping response Flask → format yang dipakai controller
+            return [
+                'stunting_status' => $json['final_status'] ?? 'Tidak diketahui',
+                'predictions' => [
+                    'tbu'  => $json['predictions']['tbu']['prediction']  ?? null,
+                    'bbu'  => $json['predictions']['bbu']['prediction']  ?? null,
+                    'bbtb' => $json['predictions']['bbtb']['prediction'] ?? null,
+                ],
+            ];
         }
+
+        return $this->fallback();
+
+    } catch (\Exception $e) {
+        \Log::error('Flask error: ' . $e->getMessage());
+        return $this->fallback();
     }
+}
 
     private function fallback()
     {
