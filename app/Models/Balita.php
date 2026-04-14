@@ -81,12 +81,16 @@ class Balita extends Model
     {
         return $this->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan';
     }
-    public static function generateKode(): string
-    {
-        $last = self::orderBy('id', 'desc')->first();
-        $number = $last ? (intval(substr($last->kode_balita, 4)) + 1) : 1;
-        return 'BLT-' . str_pad($number, 4, '0', STR_PAD_LEFT);
-    }
+public static function generateKode(): string
+{
+    $last = self::withoutGlobalScopes()
+        ->where('kode_balita', 'REGEXP', '^BLT-[0-9]+$') // hanya yang berformat angka
+        ->orderByRaw('CAST(SUBSTRING(kode_balita, 5) AS UNSIGNED) DESC')
+        ->value('kode_balita');
+
+    $number = $last ? (intval(substr($last, 4)) + 1) : 1;
+    return 'BLT-' . str_pad($number, 4, '0', STR_PAD_LEFT);
+}
     public function scopeByPosyandu($query, $posyandu_id)
     {
         return $query->where('posyandu_id', $posyandu_id);
