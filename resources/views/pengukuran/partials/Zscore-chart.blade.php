@@ -476,17 +476,7 @@ $zonaCurves = [
         },
         options: baseOptions('Umur (bulan)', 'Tinggi Badan (cm)', 0, 60),
     });
-function makeCurveDatasetsBBTB(rawData) {
-    return sdLabels.map((lbl, i) => ({
-        label: lbl,
-        data: rawData.map(r => ({ x: r[0], y: r[i + 1] })),  // ← x=length, y=SD value
-        borderColor: sdColors[i],
-        borderWidth: sdWidths[i],
-        pointRadius: 0,
-        tension: 0.4,
-        fill: false,
-    }));
-}
+
     // ── BB/TB ───────────────────────────────────────────────────
     // Untuk BB/TB sumbu X adalah panjang/tinggi (cm), bukan umur
     // Titik balita: x = tb (tinggi aktual), y = bb (berat aktual)
@@ -498,36 +488,11 @@ function makeCurveDatasetsBBTB(rawData) {
         data: {
             labels: wflLabelsFull,
             datasets: [
-                ...makeCurveDatasetsBBTB(wflData),
+                ...makeCurveDatasets(wflData, 1),
                 makePointDataset(tb, bb, 'Balita ini'),
             ],
         },
-        options: {
-        responsive: true,
-        interaction: { mode: 'index', intersect: false },
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                callbacks: {
-                    title: ctx => `Panjang/Tinggi: ${ctx[0].parsed.x} cm`,
-                    label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y}`,
-                }
-            },
-        },
-        scales: {
-            x: {
-                type: 'linear',           // ← INI KUNCINYA
-                title: { display: true, text: 'Panjang/Tinggi (cm)', font: { size: 10 } },
-                ticks: { font: { size: 9 }, stepSize: 5 },
-                min: 45,
-                max: 110,
-            },
-            y: {
-                title: { display: true, text: 'Berat Badan (kg)', font: { size: 10 } },
-                ticks: { font: { size: 9 } },
-            },
-        },
-    },
+        options: baseOptions('Panjang/Tinggi (cm)', 'Berat Badan (kg)', 45, 110),
     });
 
 })();
