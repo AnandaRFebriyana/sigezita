@@ -23,7 +23,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'phone', 
+        'phone',
+        'posyandu_id', 
         'is_active', 
     ];
 

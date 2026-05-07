@@ -35,9 +35,8 @@ class UserController extends Controller
             'name'         => 'required|string|max:100',
             'email'        => 'required|email|unique:users',
             'password'     => 'required|min:8|confirmed',
-            'no_hp'        => 'nullable|string|max:20',
-            'posyandu_id' => 'nullable|array',
-            'posyandu_id.*' => 'exists:posyandu,id',
+            'phone'        => 'nullable|string|max:20',
+            'posyandu_id' => 'nullable|exists:posyandu,id',
         ]);
 
         $user = User::create([
@@ -45,13 +44,10 @@ class UserController extends Controller
             'email'    => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role'     => 'petugas',
-            'no_hp'    => $validated['no_hp'] ?? null,
+            'phone'    => $validated['phone'] ?? null,
+            'posyandu_id' => $validated['posyandu_id'] ?? null,
             'is_active' => true,
         ]);
-
-        if (!empty($validated['posyandu_ids'])) {
-            $user->posyandu()->sync($validated['posyandu_ids']);
-        }
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Petugas berhasil ditambahkan.');
@@ -61,7 +57,7 @@ class UserController extends Controller
     {
         $posyandu = Posyandu::where('is_active', true)->get();
         $selectedPosyandu = $user->posyandu->pluck('id')->toArray();
-        return view('admin.users.edit', compact('user', 'posyandu', 'selectedPosyandu'));
+        return view('admin.users.edit', compact('user', 'posyandu'));
     }
 
     public function update(Request $request, User $user)
@@ -70,16 +66,16 @@ class UserController extends Controller
             'name'         => 'required|string|max:100',
             'email'        => 'required|email|unique:users,email,' . $user->id,
             'password'     => 'nullable|min:8|confirmed',
-            'no_hp'        => 'nullable|string|max:20',
+            'phone'        => 'nullable|string|max:20',
             'is_active'    => 'boolean',
-            'posyandu_id' => 'nullable|array',
-            'posyandu_id.*' => 'exists:posyandu,id',
+            'posyandu_id'  => 'nullable|exists:posyandu,id',
         ]);
 
         $updateData = [
             'name'      => $validated['name'],
             'email'     => $validated['email'],
-            'no_hp'     => $validated['no_hp'] ?? null,
+            'phone'     => $validated['phone'] ?? null,
+            'posyandu_id' => $validated['posyandu_id'] ?? null,
             'is_active' => $request->boolean('is_active'),
         ];
 
@@ -88,7 +84,7 @@ class UserController extends Controller
         }
 
         $user->update($updateData);
-        $user->posyandu()->sync($validated['posyandu_ids'] ?? []);
+        $user->posyandu()->sync($validated['posyandu_id'] ?? []);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Data petugas berhasil diperbarui.');
