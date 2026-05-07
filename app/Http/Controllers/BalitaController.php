@@ -65,7 +65,7 @@ class BalitaController extends Controller
         $user = Auth::user();
         $posyandu = $user->isAdmin()
             ? Posyandu::where('is_active', true)->get()
-            : $user->posyandu;
+            : Posyandu::where('id', $user->posyandu_id)->get();
  
         return view('balita.create', compact('posyandu'));
     }
@@ -126,7 +126,7 @@ class BalitaController extends Controller
         $user = Auth::user();
         $posyandu = $user->isAdmin()
             ? Posyandu::where('is_active', true)->get()
-            : $user->posyandu;
+            : Posyandu::where('id', $user->posyandu_id)->get();
  
         return view('balita.edit', compact('balita', 'posyandu'));
     }
@@ -185,8 +185,7 @@ class BalitaController extends Controller
     {
         $user = Auth::user();
         if ($user->isPetugas()) {
-            $posyanduIds = $user->posyandu->pluck('id');
-            abort_unless($posyanduIds->contains($balita->posyandu_id), 403, 'Akses ditolak.');
+            abort_unless($user->posyandu_id == $balita->posyandu_id, 403, 'Akses ditolak.'); // ✅
         }
     }
 }
