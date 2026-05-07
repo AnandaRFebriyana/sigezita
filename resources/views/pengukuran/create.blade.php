@@ -143,6 +143,23 @@
 
 @push('scripts')
 <script>
+// Warm-up + disable tombol submit sampai API siap
+const submitBtn = document.querySelector('button[type=submit]');
+const originalLabel = submitBtn.innerHTML;
+
+submitBtn.disabled = true;
+submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menghubungkan server...';
+
+fetch('https://flask-api-3rhp.onrender.com/')
+    .then(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalLabel;
+    })
+    .catch(() => {
+        // Tetap enable meski gagal, biar user bisa coba submit
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalLabel;
+    });
 function hitungUmur() {
     const sel = document.getElementById('balitaSelect');
     const opt = sel.options[sel.selectedIndex];

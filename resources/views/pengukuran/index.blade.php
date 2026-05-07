@@ -23,12 +23,12 @@
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-search fa-xs"></i></span></div>
                 <input type="text" name="search" class="form-control" placeholder="Cari nama balita..." value="{{ request('search') }}">
             </div>
-            <select name="status" class="form-control" style="width:200px">
+            <!-- <select name="status" class="form-control" style="width:200px">
                 <option value="">Semua Status</option>
                 <option value="Normal" {{ request('status') === 'Normal' ? 'selected' : '' }}>Normal</option>
                 <option value="Berisiko Gangguan Pertumbuhan" {{ request('status') === 'Berisiko Gangguan Pertumbuhan' ? 'selected' : '' }}>Berisiko</option>
                 <option value="Stunting" {{ request('status') === 'Stunting' ? 'selected' : '' }}>Stunting</option>
-            </select>
+            </select> -->
             <input type="date" name="tanggal_dari" class="form-control" value="{{ request('tanggal_dari') }}" style="width:160px">
             <span class="text-muted">s/d</span>
             <input type="date" name="tanggal_sampai" class="form-control" value="{{ request('tanggal_sampai') }}" style="width:160px">
@@ -53,7 +53,7 @@
                         <th>BB/U</th>
                         <th>TB/U</th>
                         <th>BB/TB</th>
-                        <th>Status</th>
+                        <!-- <th>Status</th> -->
                         <th>Petugas</th>
                         <th>Aksi</th>
                     </tr>
@@ -73,7 +73,7 @@
                         <td><span class="badge {{ $p->kategori_bbu_badge }}" style="font-size:0.7rem">{{ $p->kategori_bbu }}</span></td>
                         <td><span class="badge {{ $p->kategori_tbu_badge }}" style="font-size:0.7rem">{{ $p->kategori_tbu }}</span></td>
                         <td><span class="badge {{ $p->kategori_bbtb_badge }}" style="font-size:0.7rem">{{ $p->kategori_bbtb }}</span></td>
-                        <td><span class="badge {{ $p->status_badge_class }}">{{ $p->status_stunting }}</span></td>
+                        <!-- <td><span class="badge {{ $p->status_badge_class }}">{{ $p->status_stunting }}</span></td> -->
                         <td><small>{{ $p->petugas->name ?? '-' }}</small></td>
                         <td>
                             <div class="btn-group btn-group-sm">
@@ -101,6 +101,14 @@
 @endsection
 @push('scripts')
 <script>
+fetch('https://flask-api-3rhp.onrender.com/', { mode: 'no-cors' }).catch(() => {});
+
+function confirmDelete(url) {
+    if(confirm('Hapus data pengukuran ini?')) {
+        document.getElementById('deleteForm').action = url;
+        document.getElementById('deleteForm').submit();
+    }
+}
 function confirmDelete(url) {
     if(confirm('Hapus data pengukuran ini?')) {
         document.getElementById('deleteForm').action = url;
